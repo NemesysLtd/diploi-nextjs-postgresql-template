@@ -2,18 +2,12 @@
 import { Pool } from 'pg';
 import sql, { SQLStatement } from 'sql-template-strings';
 
-process.env.DB_USER = 'macke';
-process.env.DB_PASSWORD = '';
-process.env.DB_HOST = 'localhost';
-process.env.DB_PORT = '5432';
-process.env.DB_DATABASE = 'todo';
-
 export const conn = new Pool({
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  host: process.env.DB_HOST,
-  port: parseInt(process.env.DB_PORT) || 5432,
-  database: process.env.DB_DATABASE,
+  user: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  host: process.env.POSTGRES_HOST,
+  port: parseInt(process.env.POSTGRES_PORT!) || 5432,
+  database: process.env.POSTGRES_DATABASE,
 });
 
 export const query = async <Row = any>(statement: string | SQLStatement) => {

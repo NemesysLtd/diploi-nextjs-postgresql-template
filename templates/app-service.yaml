@@ -6,7 +6,8 @@ spec:
   ports:
     - port: 80
       name: app
+      ports:
+    - port: 3000
+      name: status
   selector:
-    app: {{ ternary "app" "disabled" .Values.enabled }}
-
-
+    app: { { ternary "app" "disabled" .Values.enabled } }

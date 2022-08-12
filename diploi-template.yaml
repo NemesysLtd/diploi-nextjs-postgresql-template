@@ -43,14 +43,6 @@ environmentVariables:
     defaultValue: ProjectTitleDefaultFromTemplate
     type: string
     contexts: label=app
-  - identifier: NEXT_PORT
-    defaultValue: 3000
-    type: number
-    contexts: label=app
-  - identifier: API_PORT
-    defaultValue: 3001
-    type: number
-    contexts: label=app
   - identifier: POSTGRES_HOST
     defaultValue: postgres
     type: string
@@ -68,7 +60,7 @@ environmentVariables:
     type: secret
     contexts: label=postgres
   - identifier: POSTGRES_DB
-    defaultValue: strapi
+    defaultValue: todo
     type: string
     contexts: label=postgres,label=app
 
@@ -134,4 +126,4 @@ storage:
     sizeMb: 10000
 
 status:
-  url: http://app/status
+  url: http://app:3000/status

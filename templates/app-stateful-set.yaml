@@ -41,7 +41,7 @@ spec:
               value: {{ .Values.repositories.web.gitUserName }}
             - name: APP_PUBLIC_URL
               value: {{ .Values.hosts.app }}
-            - name: DIPLOI_STAGE
+            - name: STAGE
               value: {{ .Values.stage }}
           volumeMounts:
             {{- if hasKey .Values.storage "app" }}

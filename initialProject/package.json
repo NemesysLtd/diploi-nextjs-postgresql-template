@@ -1,12 +1,12 @@
 {
-  "name": "d",
+  "name": "diploi-nextjs-postgresql-starter",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "prod": "next start",
+    "dev": "next dev -p 80",
+    "prod": "next start -p 80",
     "build": "next build",
-    "start": "if [[ ${DIPLOI_STAGE} == \"production\" ]]; then next start; else next dev; fi",
+    "start": "if [[ ${STAGE} = \"production\" ]]; then next start -p 80; else next dev -p 80; fi",
     "lint": "next lint"
   },
   "dependencies": {
