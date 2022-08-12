@@ -24,6 +24,7 @@ spec:
           #command: ['sh', '-c', 'echo The app is running! && sleep 10000']
           ports:
             - containerPort: 80
+            - containerPort: 3000
           env:
             {{- range .Values.env }}
             {{- if contains "app" .contexts }}
