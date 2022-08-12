@@ -3,7 +3,6 @@ import { shellExec } from './shellExec.mjs';
 
 const Status = {
   GREEN: 'green',
-  GREY: 'gray',
   YELLOW: 'yellow',
   RED: 'red',
 };
@@ -27,14 +26,14 @@ const processStatusToMessage = (name, status) => {
 };
 
 const getSupervisorStatus = async (name, process) => {
-  let status = Status.GRAY;
+  let status = Status.RED;
   let isPending = true;
 
   const processStatus = (await shellExec(`supervisorctl status ${process}`)).stdout || '';
   if (!processStatus.includes('ERROR')) {
     const supervisorStatus = processStatus.split(' ').filter((item) => !!item.trim())[1];
-    status = supervisorStatusToStatus[supervisorStatus] || Status.GRAY;
-    isPending = status === Status.GRAY;
+    status = supervisorStatusToStatus[supervisorStatus] || Status.RED;
+    isPending = status === Status.RED;
   }
 
   return {
@@ -164,7 +163,7 @@ const getStatus = async () => {
 
   const status = {
     diploiStatusVersion: 1,
-    items: [apiStatus, wwwStatus, proxyStatus, postgresStatus],
+    items: [wwwStatus, postgresStatus],
   };
 
   return status;
