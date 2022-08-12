@@ -6,7 +6,7 @@
     "dev": "next dev -p 80",
     "prod": "next start -p 80",
     "build": "next build",
-    "start": "if [[ ${STAGE} = \"production\" ]]; then next start -p 80; else next dev -p 80; fi",
+    "start": "if [ ${STAGE} = \"production\" ]; then next start -p 80; else next dev -p 80; fi",
     "lint": "next lint"
   },
   "dependencies": {
