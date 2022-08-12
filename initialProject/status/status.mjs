@@ -13,9 +13,9 @@ const supervisorStatusToStatus = {
   RUNNING: Status.GREEN,
   BACKOFF: Status.RED,
   STOPPING: Status.YELLOW,
-  EXITED: Status.GREY,
+  EXITED: Status.RED,
   FATAL: Status.RED,
-  UNKNOWN: Status.GREY,
+  UNKNOWN: Status.RED,
 };
 
 const processStatusToMessage = (name, status) => {
@@ -41,28 +41,6 @@ const getSupervisorStatus = async (name, process) => {
     isPending,
     message: processStatusToMessage(name, status),
   };
-};
-
-const getAPIStatus = async () => {
-  try {
-    const apiResponse = JSON.parse((await shellExec('curl http://app/api')).stdout);
-    if (apiResponse && apiResponse.error?.message === 'Not Found') {
-      return {
-        status: Status.GREEN,
-        message: '',
-      };
-    }
-
-    return {
-      status: Status.RED,
-      message: 'Node.js API is not responding',
-    };
-  } catch {
-    return {
-      status: Status.RED,
-      message: 'Failed to query Node.js API status',
-    };
-  }
 };
 
 const getWWWStatus = async () => {
@@ -92,7 +70,6 @@ const getPostgresStatus = async () => {
     identifier: 'postgres',
     name: 'PostgreSQL',
     description: 'PostgreSQL database',
-    items: [],
   };
 
   try {
@@ -120,27 +97,12 @@ const getPostgresStatus = async () => {
 };
 
 const getStatus = async () => {
-  const apiProcessStatus = await getSupervisorStatus('API', 'api');
-
-  let apiStatus = {
-    identifier: 'api',
-    name: 'API',
-    description: 'Node.js API',
-    items: [],
-    ...apiProcessStatus,
-  };
-
-  if (apiProcessStatus.status === Status.GREEN) {
-    apiStatus = { ...apiStatus, ...(await getAPIStatus()) };
-  }
-
   const wwwProcessStatus = await getSupervisorStatus('Next.js', 'www');
 
   let wwwStatus = {
     identifier: 'www',
     name: 'Next.js',
     description: 'Next.js website',
-    items: [],
     ...wwwProcessStatus,
   };
 
@@ -148,22 +110,9 @@ const getStatus = async () => {
     wwwStatus = { ...wwwStatus, ...(await getWWWStatus()) };
   }
 
-  const proxyProcessStatus = await getSupervisorStatus('Proxy', 'proxy');
-
-  let proxyStatus = {
-    identifier: 'proxy',
-    name: 'Proxy',
-    description: 'Traefik proxy routing API & Next.js traffic',
-    items: [],
-    ...proxyProcessStatus,
-    message: proxyProcessStatus.status === Status.GREEN ? '' : proxyProcessStatus.message,
-  };
-
-  const postgresStatus = await getPostgresStatus();
-
   const status = {
     diploiStatusVersion: 1,
-    items: [wwwStatus, postgresStatus],
+    items: [wwwStatus, await getPostgresStatus()],
   };
 
   return status;
