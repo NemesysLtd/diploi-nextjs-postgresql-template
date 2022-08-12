@@ -58,7 +58,7 @@ environmentVariables:
   - identifier: POSTGRES_PASSWORD
     defaultValue: postgres
     type: secret
-    contexts: label=postgres
+    contexts: label=postgres,label=app
   - identifier: POSTGRES_DB
     defaultValue: todo
     type: string
