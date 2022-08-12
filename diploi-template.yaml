@@ -1,0 +1,137 @@
+diploiTemplateVersion: V1.0
+name: diploi-nextjs-psql
+description: A template for running NextJS together with PostgreSql
+
+stages:
+  - name: Production
+    identifier: production
+  - name: Staging
+    identifier: staging
+  - name: Development
+    identifier: development
+
+contexts:
+  - name: app
+    identifier: app
+  - name: postgres
+    identifier: postgres
+
+parameterGroups:
+  - name: TODO
+    identifier: todo
+    parameters:
+      - name: AI Difficulty
+        description: How hard should the AI try? Impossible will win or tie every time.
+        identifier: tictactoe-difficulty
+        type: string
+        stages:
+          - production
+          - staging
+          - development
+      - name: Persistent history
+        description: Should we spin up a Postgres DB to save past games to?
+        identifier: tictactoe-postgres
+        value: true
+        type: boolean
+        stages:
+          - production
+          - staging
+          - development
+
+environmentVariables:
+  - identifier: PROJECT_TITLE
+    defaultValue: ProjectTitleDefaultFromTemplate
+    type: string
+    contexts: label=app
+  - identifier: NEXT_PORT
+    defaultValue: 3000
+    type: number
+    contexts: label=app
+  - identifier: API_PORT
+    defaultValue: 3001
+    type: number
+    contexts: label=app
+  - identifier: POSTGRES_HOST
+    defaultValue: postgres
+    type: string
+    contexts: label=app
+  - identifier: POSTGRES_PORT
+    defaultValue: 5432
+    type: number
+    contexts: label=app
+  - identifier: POSTGRES_USER
+    defaultValue: postgres
+    type: string
+    contexts: label=postgres,label=app
+  - identifier: POSTGRES_PASSWORD
+    defaultValue: postgres
+    type: secret
+    contexts: label=postgres
+  - identifier: POSTGRES_DB
+    defaultValue: strapi
+    type: string
+    contexts: label=postgres,label=app
+
+repositories:
+  - name: web
+    identifier: web
+
+hosts:
+  - name: App
+    identifier: app
+    urlFormat: '[label].[default-domain]'
+
+ssh:
+  - usernameFormat: '[label]'
+    contexts: label=app
+    stages:
+      - development
+  - usernameFormat: '[label]-[index]'
+    contexts: label=app
+    stages:
+      - production
+  - usernameFormat: '[label]-postgres'
+    contexts: label=postgres
+
+logs:
+  - identifier: www-log
+    name: Next.js Log
+    labelSelector: app=app
+    command: tail -n 2000 -F /var/log/www.log
+
+actions:
+  - identifier: nextjs-restart
+    name: Restart Next.js
+    labelSelector: app=app
+    command: cd www && npm run restart
+
+images:
+  - identifier: app
+    repository: web
+    dockerfile: Dockerfile
+    buildStages:
+      - production
+      - staging
+    stages:
+      - development
+      - production
+      - staging
+
+storage:
+  - identifier: app
+    stages:
+      - development
+    sizeMb: 8000
+  - identifier: rootpersist
+    stages:
+      - development
+    sizeMb: 1000
+  - identifier: postgres
+    stages:
+      - production
+      - staging
+      - development
+    sizeMb: 10000
+
+status:
+  url: http://app/status
