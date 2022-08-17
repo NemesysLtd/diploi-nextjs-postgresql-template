@@ -32,7 +32,8 @@ parameterGroups:
         identifier: POSTGRES_PORT
         defaultValue: 5432
         type: integer
-      - identifier: POSTGRES_USER
+      - name: User
+        identifier: POSTGRES_USER
         defaultValue: postgres
         type: string
         contexts: label=postgres,label=app
