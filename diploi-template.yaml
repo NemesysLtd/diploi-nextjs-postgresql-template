@@ -31,7 +31,7 @@ parameterGroups:
       - name: Port
         identifier: POSTGRES_PORT
         defaultValue: 5432
-        type: number
+        type: integer
       - identifier: POSTGRES_USER
         defaultValue: postgres
         type: string
