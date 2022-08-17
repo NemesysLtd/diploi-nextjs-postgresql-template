@@ -18,52 +18,46 @@ contexts:
     identifier: postgres
 
 parameterGroups:
-  - name: TODO
-    identifier: todo
+  - name: PostgreSQL Database
+    identifier: postgres
+    toggleable: true
+    description: Database connection info
     parameters:
-      - name: AI Difficulty
-        description: How hard should the AI try? Impossible will win or tie every time.
-        identifier: tictactoe-difficulty
+      - name: Host
+        identifier: POSTGRES_HOST
+        defaultValue: postgres
         type: string
+      - name: Port
+        identifier: POSTGRES_PORT
+        defaultValue: 5432
+        type: number
+      - identifier: POSTGRES_USER
+        defaultValue: postgres
+        type: string
+        contexts: label=postgres,label=app
+      - name: Password
+        identifier: POSTGRES_PASSWORD
+        defaultValue: postgres
+        type: secret
+      - name: Schema
+        identifier: POSTGRES_DB
+        defaultValue: todo
+        type: string
+  - name: Server
+    identifier: SERVER
+    parameters:
+      - name: Server count
+        identifier: SERVER_REPLICAS
+        defaultValue: 2
+        type: integer
         stages:
           - production
-          - staging
-          - development
-      - name: Persistent history
-        description: Should we spin up a Postgres DB to save past games to?
-        identifier: tictactoe-postgres
-        value: true
-        type: boolean
-        stages:
-          - production
-          - staging
-          - development
 
 environmentVariables:
   - identifier: PROJECT_TITLE
-    defaultValue: ProjectTitleDefaultFromTemplate
+    defaultValue: My TODO App
     type: string
     contexts: label=app
-  - identifier: POSTGRES_HOST
-    defaultValue: postgres
-    type: string
-    contexts: label=app
-  - identifier: POSTGRES_PORT
-    defaultValue: 5432
-    type: number
-    contexts: label=app
-  - identifier: POSTGRES_USER
-    defaultValue: postgres
-    type: string
-    contexts: label=postgres,label=app
-  - identifier: POSTGRES_PASSWORD
-    defaultValue: postgres
-    type: secret
-    contexts: label=postgres,label=app
-  - identifier: POSTGRES_DB
-    defaultValue: todo
-    type: string
-    contexts: label=postgres,label=app
 
 repositories:
   - name: web
