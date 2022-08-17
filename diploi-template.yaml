@@ -22,6 +22,7 @@ parameterGroups:
     identifier: postgres
     toggleable: true
     description: Database connection info
+    defaultValue: TRUE
     parameters:
       - name: Host
         identifier: POSTGRES_HOST
