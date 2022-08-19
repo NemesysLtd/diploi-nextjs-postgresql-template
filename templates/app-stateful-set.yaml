@@ -32,6 +32,10 @@ spec:
               value: {{ .value | quote }}
             {{- end }}
             {{- end }}
+            {{- range .Values.parameterGroups }}
+            - name: {{ .identifier }}
+              value: {{ .value | quote }}
+            {{- end }}
             - name: REPOSITORY_URL
               value: {{ .Values.repositories.web.url }} 
             - name: REPOSITORY_BRANCH
