@@ -92,7 +92,7 @@ actions:
   - identifier: nextjs-restart
     name: Restart Next.js
     labelSelector: app=app
-    command: cd www && npm run restart
+    command: supervisord restart www
 
 images:
   - identifier: app
