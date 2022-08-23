@@ -4,13 +4,13 @@ description: A template for running NextJS together with PostgreSQL
 defaultName: Todo App
 
 stages:
-  - name: Production
-    identifier: production
-  - name: Staging
-    identifier: staging
   - name: Development
     identifier: development
-
+  - name: Staging
+    identifier: staging
+  - name: Production
+    identifier: production
+  
 contexts:
   - name: app
     identifier: app
@@ -98,6 +98,7 @@ images:
   - identifier: app
     repository: web
     dockerfile: Dockerfile
+    image: nemesys/diploi-nextjs-psql-template:[template-tag]
     buildStages:
       - production
       - staging
