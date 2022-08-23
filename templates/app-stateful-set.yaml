@@ -52,10 +52,12 @@ spec:
             {{- if hasKey .Values.storage "app" }}
             - name: app-mount
               mountPath: /app
-            {{- end }}
-            {{- if hasKey .Values.storage "rootpersist" }}
-            - name: root-mount
-              mountPath: /root-persist
+            - name: bash-history
+              mountPath: /root/.bash_history
+            - name: vscode-server
+              mountPath: /root/.vscode-server
+            - name: git-config
+              mountPath: /root/.gitconfig
             {{- end }}
             - name: ssh-keys
               mountPath: /etc/ssh/internal_ssh_host_rsa.pub
@@ -64,12 +66,19 @@ spec:
         {{- if hasKey .Values.storage "app" }}
         - name: app-mount
           hostPath:
-            path: {{ .Values.storage.app.hostPath }}
-        {{- end }}
-        {{- if hasKey .Values.storage "rootpersist" }}
-        - name: root-mount
+            path: {{ .Values.storage.app.hostPath }}/app
+        - name: bash-history
           hostPath:
-            path: {{ .Values.storage.rootpersist.hostPath }}
+            path: {{ .Values.storage.app.hostPath }}/root-persist/.bash_history
+            type: FileOrCreate
+        - name: vscode-server
+          hostPath:
+            path: {{ .Values.storage.app.hostPath }}/root-persist/.vscode-server
+            type: DirectoryOrCreate
+        - name: git-config
+          hostPath:
+            path: {{ .Values.storage.app.hostPath }}/root-persist/.gitconfig
+            type: FileOrCreate
         {{- end }}
         - name: ssh-keys
           secret:

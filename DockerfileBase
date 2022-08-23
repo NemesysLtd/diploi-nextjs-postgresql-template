@@ -26,13 +26,6 @@ RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment && \
   echo "LANG=en_US.UTF-8" > /etc/locale.conf && \
   locale-gen en_US.UTF-8
 
-# Symlink some files/dirs we want to persist between dev pod reboots (in development mode)
-RUN mkdir -p /root-persist \
-  && mkdir -p /root-persist/.vscode-server \
-  && ln -s /root-persist/.bash_history /root/.bash_history \
-  && ln -s /root-persist/.gitconfig /root/.gitconfig \
-  && ln -s /root-persist/.vscode-server/ /root/.vscode-server
-
 # Init and run supervisor
 COPY runonce.sh /root/runonce.sh
 COPY supervisord.conf /etc/supervisord.conf

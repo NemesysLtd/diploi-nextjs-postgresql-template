@@ -111,10 +111,6 @@ storage:
     stages:
       - development
     sizeMb: 8000
-  - identifier: rootpersist
-    stages:
-      - development
-    sizeMb: 1000
   - identifier: postgres
     stages:
       - production
