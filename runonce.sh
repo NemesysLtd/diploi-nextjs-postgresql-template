@@ -35,6 +35,13 @@ update-ca-certificates
 # Make all special env variables available in ssh also (ssh will wipe out env by default)
 env >> /etc/environment
 
+# Configure the SQLTools VSCode extension
+sed -i 's/POSTGRES_HOST/'"$POSTGRES_HOST"'/' .vscode/settings.json
+sed -i 's/POSTGRES_PORT/'"$POSTGRES_PORT"'/' .vscode/settings.json
+sed -i 's/POSTGRES_DB/'"$POSTGRES_DB"'/' .vscode/settings.json
+sed -i 's/POSTGRES_USER/'"$POSTGRES_USER"'/' .vscode/settings.json
+sed -i 's/POSTGRES_PASSWORD/'"$POSTGRES_PASSWORD"'/' .vscode/settings.json
+
 # Now that everything is initialized, start all services
 supervisorctl start www
 
