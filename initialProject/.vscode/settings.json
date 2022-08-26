@@ -2,13 +2,13 @@
   "sqltools.connections": [
     {
       "previewLimit": 50,
-      "server": "postgres",
-      "port": 5432,
+      "server": "POSTGRES_HOST",
+      "port": POSTGRES_PORT,
       "driver": "PostgreSQL",
-      "name": "Strapi",
-      "database": "strapi",
-      "username": "postgres",
-      "password": "postgres"
+      "name": "PostgreSQL",
+      "database": "POSTGRES_DB",
+      "username": "POSTGRES_USER",
+      "password": "POSTGRES_PASSWORD",
     }
   ]
 }
