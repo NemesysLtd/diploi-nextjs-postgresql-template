@@ -26,15 +26,3 @@ TODO: Write
 ```bash
 su postgres -c 'psql'
 ```
-
-### Connect via another app (locally)
-
-```json
-{
-  "host": "localhost",
-  "port": 5432,
-  "username": "strapi",
-  "password": "strapi",
-  "database": "strapi"
-}
-```
