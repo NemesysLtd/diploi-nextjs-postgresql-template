@@ -4,3 +4,4 @@ FROM nemesys/diploi-nextjs-psql-template:[template-tag]
 WORKDIR /app
 COPY project/. ./
 RUN npm install
+RUN npm run build
