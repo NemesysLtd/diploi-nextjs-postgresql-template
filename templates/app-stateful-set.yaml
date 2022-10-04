@@ -41,10 +41,6 @@ spec:
               value: {{ .Values.repositories.web.url }} 
             - name: REPOSITORY_BRANCH
               value: {{ .Values.repositories.web.branch }} 
-            - name: GIT_USER_EMAIL
-              value: {{ .Values.repositories.web.gitUserEmail }} 
-            - name: GIT_USER_NAME
-              value: {{ .Values.repositories.web.gitUserName }}
             - name: APP_PUBLIC_URL
               value: {{ .Values.hosts.app }}
             - name: STAGE

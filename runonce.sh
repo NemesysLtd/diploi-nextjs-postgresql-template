@@ -22,8 +22,6 @@ if [ ! "$(ls -A /app)" ]; then
   git remote add --fetch origin $REPOSITORY_URL;
   git checkout -f $REPOSITORY_BRANCH;
   git remote set-url origin "$REPOSITORY_URL";
-  git config --global user.email "$GIT_USER_EMAIL";
-  git config --global user.name "$GIT_USER_NAME";
   
   # Configure the SQLTools VSCode extension
   sed -i 's/POSTGRES_HOST/'"$POSTGRES_HOST"'/' /app/.vscode/settings.json
