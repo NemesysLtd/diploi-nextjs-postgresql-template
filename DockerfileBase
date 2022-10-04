@@ -28,7 +28,7 @@ RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment && \
   
 # Gitconfig secrets and credential helper
 RUN ln -s /etc/diploi-git/gitconfig /etc/gitconfig
-COPY diploi-credential-helper.sh /usr/local/bin
+COPY diploi-credential-helper /usr/local/bin
 
 # Init and run supervisor
 COPY runonce.sh /root/runonce.sh
