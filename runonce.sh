@@ -20,8 +20,10 @@ if [ ! "$(ls -A /app)" ]; then
 
   git init;
   git remote add --fetch origin $REPOSITORY_URL;
+  git config credential.helper diploi-credential-helper;
   git checkout -f $REPOSITORY_BRANCH;
   git remote set-url origin "$REPOSITORY_URL";
+  git config credential.helper --unset;
   
   # Configure the SQLTools VSCode extension
   sed -i 's/POSTGRES_HOST/'"$POSTGRES_HOST"'/' /app/.vscode/settings.json
