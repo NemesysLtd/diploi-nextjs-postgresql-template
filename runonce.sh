@@ -19,8 +19,8 @@ if [ ! "$(ls -A /app)" ]; then
   touch /root-persist/.gitconfig;
 
   git init;
-  git remote add --fetch origin $REPOSITORY_URL;
   git config credential.helper '!diploi-credential-helper';
+  git remote add --fetch origin $REPOSITORY_URL;
   git checkout -f $REPOSITORY_BRANCH;
   git remote set-url origin "$REPOSITORY_URL";
   git config credential.helper --unset;
