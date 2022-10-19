@@ -77,7 +77,7 @@ const Home: NextPage = () => {
 
   const onAdd = async () => {
     resetTimer();
-    setList([...list, { id: -1, name: '', checked: false }]);
+    setList([...list, { id: -list.length, name: '', checked: false }]);
     await apiPostRequest<ApiResponse>('/api/add', {});
   };
 
