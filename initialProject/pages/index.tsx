@@ -27,12 +27,12 @@ const Home: NextPage = () => {
   const fetchList = async () => {
     if (!document.hidden) {
       const response = await apiPostRequest<ApiResponse>('/api/list', {});
-      if (response.status != 'ok') {
+      if (response.status == 'ok') {
+        if (state != 'ok') setState('ok');        
+        setList(response.list);
+      } else {
         console.log('Error getting list', response);
-        return;
       }
-      if (state != 'ok') setState('ok');
-      setList(response.list);
     }
     clearTimeout(updateTimerID);
     updateTimerID = setTimeout(fetchList, document.hidden ? 500 : 1500);
