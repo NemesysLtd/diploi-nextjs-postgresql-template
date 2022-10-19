@@ -21,18 +21,20 @@ export const query = async <Row = any>(statement: string | SQLStatement) => {
 // Create database if it doesn't exist
 // NOTE! Not the ideal place/way of doing this, but works for now
 const initDb = async () => {
-  console.log('initDb');
   try {
-    const result = await query(sql`SELECT count(*) FROM todo`);
-  } catch (error) {
-    console.log('Initializing database');
-    try {
-      await query(sql`CREATE TABLE todo (id SERIAL PRIMARY KEY, name TEXT, checked BOOLEAN)`);
-      await query(sql`INSERT INTO todo (checked, name) VALUES (TRUE, 'Milk')`);
-      await query(sql`INSERT INTO todo (checked, name) VALUES (FALSE, 'Beef')`);
-    } catch (createError) {
-      console.log('Error initializing database', createError);
+    // await query(sql`DROP TABLE IF EXISTS todo`);
+    const exists = (await query(sql`SELECT to_regclass('public.todo') as exists`))[0].exists;
+    if (!exists) {
+      console.log(new Date().toISOString(), 'Initializing database');
+      await query(
+        sql`CREATE TABLE todo (id SERIAL PRIMARY KEY, name TEXT NOT NULL, checked BOOLEAN NOT NULL, sort INTEGER, time_update TIMESTAMP WITH TIME ZONE NOT NULL)`
+      );
+      await query(
+        sql`INSERT INTO todo (checked, name, sort, time_update) VALUES (TRUE, 'Bananas', 1, now()), (FALSE, 'Milk', 2, now()),  (FALSE, 'Noodles', 3, now())`
+      );
     }
+  } catch (createError) {
+    console.log(new Date().toISOString(), 'Error initializing database', createError);
   }
 };
 

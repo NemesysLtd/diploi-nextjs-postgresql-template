@@ -4,9 +4,10 @@ import sql from 'sql-template-strings';
 import { jsonResponse } from '../../lib/apiHelpers';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const id = req.body.id as number;
   try {
-    const list = await query(sql`SELECT id, checked, name, time_update FROM todo ORDER BY sort`);
-    jsonResponse(req, res, 200, { status: 'ok', list });
+    await query(sql`DELETE FROM todo WHERE id=${id}`);
+    jsonResponse(req, res, 200, { status: 'ok' });
   } catch (error) {
     console.log(error);
     jsonResponse(req, res, 500, { status: 'error' });

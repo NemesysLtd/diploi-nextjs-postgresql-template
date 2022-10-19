@@ -26,6 +26,7 @@ if [ ! "$(ls -A /app)" ]; then
   git config --unset credential.helper;
   
   # Configure the SQLTools VSCode extension
+  # TODO: How to update these if env changes?
   sed -i 's/POSTGRES_HOST/'"$POSTGRES_HOST"'/' /app/.vscode/settings.json
   sed -i 's/POSTGRES_PORT/'"$POSTGRES_PORT"'/' /app/.vscode/settings.json
   sed -i 's/POSTGRES_DB/'"$POSTGRES_DB"'/' /app/.vscode/settings.json

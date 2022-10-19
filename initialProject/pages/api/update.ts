@@ -4,12 +4,9 @@ import sql from 'sql-template-strings';
 import { jsonResponse } from '../../lib/apiHelpers';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const list = req.body.list as { checked: boolean; name: string }[];
+  const { id, checked, name } = req.body as { id: number; checked: boolean; name: string };
   try {
-    await query(sql`DELETE FROM todo`);
-    for (const item of list) {
-      await query(sql`INSERT INTO todo (checked, name) VALUES (${item.checked}, ${item.name})`);
-    }
+    await query(sql`UPDATE todo SET checked=${checked}, name=${name}, time_update=now() WHERE id=${id}`);
     jsonResponse(req, res, 200, { status: 'ok' });
   } catch (error) {
     console.log(error);

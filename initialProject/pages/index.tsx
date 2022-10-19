@@ -1,60 +1,91 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { apiPostRequest } from '../lib/request';
 import styles from '../styles/Home.module.css';
 
-type ListItem = { checked: boolean; name: string };
+type ListItem = { id: number; checked: boolean; name: string };
+type ApiResponse = { status: 'ok'; list: ListItem[] };
+
+let updateTimerID: NodeJS.Timeout;
 
 const Home: NextPage = () => {
+  //
+  // State
+  //
+
   const [list, setList] = useState<ListItem[]>([]);
+  const [editedValue, setEditedValue] = useState<string>('');
+  const editedItemID = useRef<number | null>(null);
+  const [state, setState] = useState<'initializing' | 'error' | 'ok'>('initializing');
 
-  const onChangeName = (index: number, value: string) => {
-    const newList = [...list];
-    newList[index].name = value;
-    setList(newList);
-    apiPostRequest('/api/list-store', { list: newList });
-  };
-
-  const onDelete = (index: number) => {
-    if (list.length < 2) return;
-    const newList = [...list];
-    newList.splice(index, 1);
-    setList(newList);
-    apiPostRequest('/api/list-store', { list: newList });
-  };
-
-  const onToggle = (index: number) => {
-    const newList = [...list];
-    newList[index].checked = !newList[index].checked;
-    setList(newList);
-    apiPostRequest('/api/list-store', { list: newList });
-  };
-
-  const onAdd = () => {
-    const newList = [...list, { checked: false, name: '' }];
-    setList(newList);
-    apiPostRequest('/api/list-store', { list: newList });
+  const resetTimer = () => {
+    clearTimeout(updateTimerID);
+    updateTimerID = setTimeout(fetchList, 5000);
   };
 
   const fetchList = async () => {
-    try {
-      const response = await apiPostRequest<{ status: 'ok'; list: ListItem[] }>('/api/list', { fix: 123 });
+    if (!document.hidden) {
+      const response = await apiPostRequest<ApiResponse>('/api/list', {});
       if (response.status != 'ok') {
-        throw new Error(`Request error ${response.status}`);
+        console.log('Error getting list', response);
+        return;
       }
+      if (state != 'ok') setState('ok');
       setList(response.list);
-    } catch (err) {
-      setList([]);
     }
+    clearTimeout(updateTimerID);
+    updateTimerID = setTimeout(fetchList, document.hidden ? 500 : 1500);
   };
 
   useEffect(() => {
-    fetchList();
-    const id = setInterval(fetchList, 10000);
-    return () => clearInterval(id);
+    // Prevent React18 devlopment double component mount
+    clearTimeout(updateTimerID);
+    updateTimerID = setTimeout(fetchList, 10);
+    return () => clearTimeout(updateTimerID);
   }, []);
+
+  //
+  // Handlers
+  //
+
+  const onChangeName = async (item: ListItem, value: string) => {
+    setEditedValue(value);
+    resetTimer();
+    await apiPostRequest<ApiResponse>('/api/update', { ...item, name: value });
+  };
+
+  const onDelete = async (item: ListItem) => {
+    resetTimer();
+    const newList = [...list];
+    newList.splice(
+      list.findIndex((i) => i.id == item.id),
+      1
+    );
+    setList(newList);
+    await apiPostRequest<ApiResponse>('/api/delete', { id: item.id });
+  };
+
+  const onToggle = async (item: ListItem) => {
+    resetTimer();
+    const newList = [...list];
+    const changedItem = newList.find((l) => l.id == item.id)!;
+    changedItem.checked = !changedItem.checked;
+    setList(newList);
+    const response = await apiPostRequest<ApiResponse>('/api/update', changedItem);
+    if (response.status == 'ok') setList(response.list);
+  };
+
+  const onAdd = async () => {
+    resetTimer();
+    setList([...list, { id: -1, name: '', checked: false }]);
+    const response = await apiPostRequest<ApiResponse>('/api/add', {});
+    if (response.status == 'ok') setList(response.list);
+  };
+
+  //
+  // Render
+  //
 
   return (
     <div className={styles.container}>
@@ -71,16 +102,35 @@ const Home: NextPage = () => {
           <br /> TODO-list
         </h1>
 
-        <div className={styles.list}>
-          {list.map((l, i) => (
-            <div key={i}>
-              <input type="checkbox" onChange={() => onToggle(i)} checked={l.checked} />
-              <input type="text" onChange={(e) => onChangeName(i, e.target.value)} value={l.name} />
-              &nbsp;<button onClick={() => onDelete(i)}>X</button>
+        {state == 'initializing' && <div style={{ padding: '50px' }}>LOADING</div>}
+        {state == 'ok' && (
+          <>
+            <div className={styles.list}>
+              {list.map((l, i) => (
+                <div key={l.id}>
+                  <input type="checkbox" onChange={() => onToggle(l)} checked={l.checked} />
+                  <input
+                    type="text"
+                    onFocus={() => {
+                      editedItemID.current = l.id;
+                      setEditedValue(l.name);
+                    }}
+                    onBlur={() => {
+                      editedItemID.current = null;
+                      const newList = [...list];
+                      newList.find((l2) => l2.id == l.id)!.name = editedValue;
+                      setList(newList);
+                    }}
+                    onChange={(e) => onChangeName(l, e.target.value)}
+                    value={editedItemID.current == l.id ? editedValue : l.name}
+                  />
+                  &nbsp;<button onClick={() => onDelete(l)}>X</button>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <button onClick={onAdd}>Add</button>
+            <button onClick={onAdd}>Add</button>
+          </>
+        )}
       </main>
     </div>
   );

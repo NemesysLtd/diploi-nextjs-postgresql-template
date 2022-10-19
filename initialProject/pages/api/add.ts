@@ -5,8 +5,10 @@ import { jsonResponse } from '../../lib/apiHelpers';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const list = await query(sql`SELECT id, checked, name, time_update FROM todo ORDER BY sort`);
-    jsonResponse(req, res, 200, { status: 'ok', list });
+    await query(
+      sql`INSERT INTO todo (checked, name, sort, time_update) VALUES (FALSE, '', (SELECT coalesce(max(sort),0)+1 FROM todo), now())`
+    );
+    jsonResponse(req, res, 200, { status: 'ok' });
   } catch (error) {
     console.log(error);
     jsonResponse(req, res, 500, { status: 'error' });
