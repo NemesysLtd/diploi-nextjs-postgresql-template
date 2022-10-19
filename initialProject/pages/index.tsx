@@ -77,7 +77,8 @@ const Home: NextPage = () => {
 
   const onAdd = async () => {
     resetTimer();
-    setList([...list, { id: -list.length, name: '', checked: false }]);
+    const tmpID = list.reduce((prev, curr) => curr = Math.min(prev, curr), 0) -1;
+    setList([...list, { id: tmpID, name: '', checked: false }]);
     await apiPostRequest<ApiResponse>('/api/add', {});
   };
 
