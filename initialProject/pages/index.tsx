@@ -72,15 +72,13 @@ const Home: NextPage = () => {
     const changedItem = newList.find((l) => l.id == item.id)!;
     changedItem.checked = !changedItem.checked;
     setList(newList);
-    const response = await apiPostRequest<ApiResponse>('/api/update', changedItem);
-    if (response.status == 'ok') setList(response.list);
+    await apiPostRequest<ApiResponse>('/api/update', changedItem);
   };
 
   const onAdd = async () => {
     resetTimer();
     setList([...list, { id: -1, name: '', checked: false }]);
-    const response = await apiPostRequest<ApiResponse>('/api/add', {});
-    if (response.status == 'ok') setList(response.list);
+    await apiPostRequest<ApiResponse>('/api/add', {});
   };
 
   //
