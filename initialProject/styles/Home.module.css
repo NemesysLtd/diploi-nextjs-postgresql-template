@@ -1,79 +1,90 @@
-.container {
-  padding: 0 2rem;
-}
-
 .main {
-  
-  padding: 4rem 0;
-  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-
-
-.title a {
-  color: #0070f3;
-  text-decoration: none;
-}
-
-.title a:hover,
-.title a:focus,
-.title a:active {
-  text-decoration: underline;
+  padding: 64px 0;
 }
 
 .title {
   margin: 0;
+  font-size: 64px;
   line-height: 1.15;
-  font-size: 4rem;
-}
-
-.title,
-.description {
   text-align: center;
 }
 
-.description {
-  margin: 4rem 0;
-  line-height: 1.5;
-  font-size: 1.5rem;
-}
-
 .list {
-  padding-top: 2rem;
+  margin: 32px 0;
+  padding: 0;
+  width: 65ch;
+  list-style: none;
 }
 
-
-.list > div {
-  padding: 0.2rem;
+.list > li {
+  display: flex;
+  align-items: center;
 }
 
-.list div > input[type=text] {
-  width: 20rem;
+.list > li:not(:last-of-type) {
+  margin-bottom: 2px;
+  padding-bottom: 2px;
+  border-bottom: 2px solid var(--app-border-color);
+}
+
+.list > li > input[type=checkbox] {
+  margin: 0;
+  margin-right: 4px;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--app-link-color);
+}
+
+.list > li > input[type=text] {
+  flex: 1;
+  padding: 8px;
+  font-size: 16px;
+  background: none;
+  border: none;
+}
+
+.list > li > button {
+  padding: 0;
+  width: 16px;
+  height: 16px;
+  font-size: 24px;
+  line-height: 0;
+  background: none;
+  border: none;
+  color: gray;
+  cursor: pointer;
+}
+
+.list > li > button:hover {
+  color: black;
 }
 
 .list div > span {
   cursor: pointer;
 }
 
-@media (max-width: 600px) {
-  .grid {
-    width: 100%;
-    flex-direction: column;
-  }
+.add {
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 36px;
+  cursor: pointer;
 }
 
-@media (prefers-color-scheme: dark) {
-  .card,
-  .footer {
-    border-color: #222;
-  }
-  .code {
-    background: #111;
-  }
-  .logo img {
-    filter: invert(1);
-  }
+.footer > p {
+  margin-top: 32px;
+  text-align: center;
+  line-height: 1.35;
+}
+
+.footer > p > a {
+  font-weight: bold;
+  text-align: center;
+  text-decoration: underline;
+  color: var(--app-link-color);
 }

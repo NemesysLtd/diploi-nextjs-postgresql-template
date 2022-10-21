@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { query } from '../../lib/db';
 import sql from 'sql-template-strings';
+import { query } from '../../lib/db';
 import { jsonResponse } from '../../lib/apiHelpers';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
