@@ -6,6 +6,7 @@ import styles from '../styles/Home.module.css';
 
 type ListItem = { id: number; checked: boolean; name: string };
 type ApiResponse = { status: 'ok'; list: ListItem[] };
+type AddApiResponse = { status: 'ok'; id: number };
 
 let updateTimerID: NodeJS.Timeout;
 
@@ -79,11 +80,21 @@ const Home: NextPage = () => {
 
   const onAdd = async () => {
     resetTimer();
-    const tmpID =
-      list.reduce((prev, curr) => (prev = Math.min(prev, curr.id)), 0) - 1;
-    console.log(list, tmpID);
+    const tmpID = list.reduce((prev, curr) => (prev = Math.min(prev, curr.id)), 0) - 1;
     setList([...list, { id: tmpID, name: '', checked: false }]);
-    await apiPostRequest<ApiResponse>('/api/add', {});
+    const ret = (await apiPostRequest<AddApiResponse>('/api/add', {})) as AddApiResponse;
+    setList((list) => {
+      const item = list.find((l) => l.id == tmpID);
+      if (item) item.id = ret.id;
+      return [...list];
+    });
+    let count = 0;
+    let e = null;
+    while (!e && count++ < 10) {
+      e = document.getElementById('item' + ret.id);
+      await new Promise((r) => setTimeout(r, 10));
+    }
+    if (e) e.focus();
   };
 
   //
@@ -114,6 +125,7 @@ const Home: NextPage = () => {
                   <input
                     type="text"
                     placeholder="…"
+                    id={'item' + l.id}
                     onFocus={() => {
                       editedItemID.current = l.id;
                       setEditedValue(l.name);
