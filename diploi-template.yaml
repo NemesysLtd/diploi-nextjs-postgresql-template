@@ -1,7 +1,7 @@
 diploiTemplateVersion: V1.0
-name: diploi-nextjs-postgresql
-description: A template for running NextJS together with PostgreSQL
-defaultName: Todo App
+name: diploi-nextjs-todo
+description: A starter template for Next.js
+defaultName: Next.js ToDo
 
 stages:
   - name: Development
