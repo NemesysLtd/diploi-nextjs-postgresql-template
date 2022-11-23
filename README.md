@@ -1,4 +1,9 @@
-# Diploi Next.js + Postresql template
+# Diploi Next.js ToDo template
+
+A simple starter ToDo app template implemented with Next.js & React.   
+Includes an optional PostgreSQL database.
+
+Features full TypeScript support, out-of-the-box DB connection, HMR support, and much more!
 
 - 💻 [Next.js](https://nextjs.org/)
 - 💿 [PostgreSQL](https://www.postgresql.org/)
@@ -7,13 +12,9 @@
 
 Available at `/`.
 
-TODO: Write
-
 ## PostgreSQL
 
 Available with a VSCode extension ([SQLTools](https://marketplace.visualstudio.com/items?itemName=mtxr.sqltools)) or by CLI.
-
-TODO: Write
 
 ### Connect via SQLTools
 
