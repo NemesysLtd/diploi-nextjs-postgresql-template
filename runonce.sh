@@ -27,11 +27,22 @@ if [ ! "$(ls -A /app)" ]; then
   
   # Configure the SQLTools VSCode extension
   # TODO: How to update these if env changes?
-  sed -i 's/POSTGRES_HOST/'"$POSTGRES_HOST"'/' /app/.vscode/settings.json
-  sed -i 's/POSTGRES_PORT/'"$POSTGRES_PORT"'/' /app/.vscode/settings.json
-  sed -i 's/POSTGRES_DB/'"$POSTGRES_DB"'/' /app/.vscode/settings.json
-  sed -i 's/POSTGRES_USER/'"$POSTGRES_USER"'/' /app/.vscode/settings.json
-  sed -i 's/POSTGRES_PASSWORD/'"$POSTGRES_PASSWORD"'/' /app/.vscode/settings.json
+  cat > /app/.vscode/settings.json << EOL
+{
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "$POSTGRES_HOST",
+      "port": $POSTGRES_PORT,
+      "driver": "PostgreSQL",
+      "name": "PostgreSQL",
+      "database": "$POSTGRES_DB",
+      "username": "$POSTGRES_USER",
+      "password": "$POSTGRES_PASSWORD",
+    }
+  ]
+}
+EOL
 
   npm install;
 
