@@ -1,12 +1,12 @@
 # Diploi Next.js ToDo template
 
-A simple starter ToDo app template implemented with Next.js & React.   
+A simple starter ToDo app template implemented with Next.js & React.
 Includes an optional PostgreSQL database.
 
 Features full TypeScript support, out-of-the-box DB connection, HMR support, and much more!
 
-- 💻 [Next.js](https://nextjs.org/)
-- 💿 [PostgreSQL](https://www.postgresql.org/)
+- 💻 [Next.js](https://nextjs.org)
+- 💿 [PostgreSQL](https://www.postgresql.org)
 
 ## Next.js
 
